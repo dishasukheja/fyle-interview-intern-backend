@@ -1,0 +1,105 @@
+Docker Documentation
+Detailed exploration of Dockerfile and Docker Compose, covering 
+essential concepts and practical examples.
+Dockerfiles: Building Your Containerized Environment
+
+1. Understanding the Basics
+• Dockerfile Structure: Dockerfiles are plain text files that contain a series of 
+instructions, each starting with a keyword like FROM, COPY, RUN, etc. These 
+instructions are executed sequentially to build a Docker image.
+• Base Images: The FROM instruction defines the foundation for your image. It 
+specifies an existing Docker image to use as a starting point. Popular base images 
+include:
+• OKicial Images: Provided by Docker Hub (e.g., node:16, python:3.9, ubuntu:latest).
+• Custom Images: Images you or others have built and published.
+
+
+2. Key Dockerfile Instructions
+• FROM: Specifies the base image for your image.
+```dockerfile
+FROM node:16
+```
+• WORKDIR: Sets the working directory inside the container.
+```dockerfile
+WORKDIR /app
+```
+• COPY: Copies files or directories from your host machine into the container.
+```dockerfile
+COPY . . # Copies all files and directories from the current directory to the 
+container's root
+```
+• RUN: Executes a command inside the container.
+```dockerfile
+RUN npm install # Installs Node.js dependencies
+```
+• EXPOSE: Declares which ports the container will expose for communication.
+```dockerfile
+EXPOSE 3000 # Exposes port 3000 for web server access
+```
+• CMD: Specifies the command to run when the container starts.
+```dockerfile
+CMD ["npm", "start"] # Starts your application using the "npm start" command
+```
+
+
+3. Building Images
+• The docker build Command:
+```bash
+docker build -t my-app:latest . 
+```
+• -t my-app:latest: Tags the image as "my-app" with the "latest" tag.
+• . : Indicates that the Dockerfile is located in the current directory.
+
+
+4. Advanced Dockerfile Techniques
+• Multi-stage Builds: Optimize your image by using multiple stages to build diKerent 
+parts of your application separately, then only include the necessary components 
+in the final image.
+• Environment Variables: Define variables that can be set at runtime or during image 
+build.
+• User and Group Management: Customize user and group permissions within your 
+container.
+
+
+# Docker Compose: Orchestrating Multi-Container Applications
+1. docker-compose.yml Structure
+• YAML Format: Docker Compose uses YAML (YAML Ain't Markup Language) to 
+define your multi-container application.
+• Services: Each service represents a container in your application.
+
+2. Example docker-compose.yml
+ ```yaml
+ version: "3.9"
+ services:
+ web:
+ build: .
+ ports:
+ - "3000:3000"
+ depends_on:
+ - db
+ db:
+ image: postgres:latest
+ environment:
+ POSTGRES_USER: myuser
+ POSTGRES_PASSWORD: mypassword
+ POSTGRES_DB: mydatabase
+ ```
+
+3. Key Docker Compose Concepts
+• build: Specifies the directory containing your Dockerfile for building the service's 
+image.
+• ports: Maps ports between the container and the host machine.
+• depends_on: Specifies dependencies between services. The web service will wait 
+for the db service to start before it runs.
+• environment: Sets environment variables for the container.
+
+4. Running Docker Compose
+• docker-compose up -d: Starts all services in the background.
+• docker-compose down: Stops and removes the containers and networks created 
+by Docker Compose.
+
+5. Advanced Docker Compose Features
+• Networks: Define custom networks to connect services.
+• Volumes: Persist data outside the container, allowing for data sharing and 
+persistence.
+• Secrets: Store sensitive information securely
